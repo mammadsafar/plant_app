@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:plant_app/const/constants.dart';
 import 'package:plant_app/models/plant.dart';
+import 'package:plant_app/screens/detail_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -121,86 +123,226 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 reverse: true,
                 itemBuilder: (context, index) {
-                  return Container(
-                    width: 200,
-                    margin: const EdgeInsets.symmetric(horizontal: 18),
-                    decoration: BoxDecoration(
-                      color: Constants.primaryColor.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 10,
-                          right: 20,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(50),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                            child: DetailPage(
+                              plantId: _plantList[index].plantId,
                             ),
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: _plantList[index].isFavorated == true
-                                  ? Icon(
-                                      Icons.favorite,
-                                      color: Constants.primaryColor,
-                                    )
-                                  : const Icon(Icons.favorite_border_outlined),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 50,
-                          right: 50,
-                          top: 50,
-                          bottom: 50,
-                          child: Image.asset(_plantList[index].imageURL),
-                        ),
-                        Positioned(
-                          left: 20,
-                          bottom: 15,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 1),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              r'$' + _plantList[index].price.toString(),
-                              style: TextStyle(
-                                  color: Constants.primaryColor, fontSize: 16),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 20,
-                          bottom: 15,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                _plantList[index].category,
-                                style: const TextStyle(
-                                  fontFamily: 'YekanBakh',
-                                  color: Colors.white70,
-                                  fontSize: 14,
-                                ),
+                            type: PageTransitionType.rightToLeft),
+                      );
+                    },
+                    child: Container(
+                      width: 200,
+                      margin: const EdgeInsets.symmetric(horizontal: 18),
+                      decoration: BoxDecoration(
+                        color: Constants.primaryColor.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 10,
+                            right: 20,
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(50),
                               ),
-                              Text(
-                                _plantList[index].plantName,
-                                style: const TextStyle(
+                              child: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    bool isFavorited = toggleIsFavorite(
+                                        (_plantList[index].isFavorated));
+                                    _plantList[index].isFavorated = isFavorited;
+                                  });
+                                },
+                                icon: _plantList[index].isFavorated == true
+                                    ? Icon(
+                                        Icons.favorite,
+                                        color: Constants.primaryColor,
+                                      )
+                                    : Icon(
+                                        Icons.favorite_border_outlined,
+                                        color: Constants.primaryColor,
+                                      ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 50,
+                            right: 50,
+                            top: 50,
+                            bottom: 50,
+                            child: Image.asset(_plantList[index].imageURL),
+                          ),
+                          Positioned(
+                            left: 20,
+                            bottom: 15,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 1),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                r'$ ' +
+                                    _plantList[index]
+                                        .price
+                                        .toString()
+                                        .farsiNumber,
+                                style: TextStyle(
+                                    color: Constants.primaryColor,
+                                    fontSize: 16,
+                                    fontFamily: 'Lalezar'),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 20,
+                            bottom: 15,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  _plantList[index].category,
+                                  style: const TextStyle(
                                     fontFamily: 'YekanBakh',
                                     color: Colors.white70,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Text(
+                                  _plantList[index].plantName,
+                                  style: const TextStyle(
+                                      fontFamily: 'YekanBakh',
+                                      color: Colors.white70,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            // New Plant - Text
+            Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 18, bottom: 15, top: 20),
+              child: const Text(
+                'گیاهان جدید',
+                style: TextStyle(
+                  fontFamily: 'Lalezar',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            // Product Two
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              height: size.height * 0.3,
+              child: ListView.builder(
+                itemCount: _plantList.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                            child: DetailPage(
+                              plantId: _plantList[index].plantId,
+                            ),
+                            type: PageTransitionType.rightToLeft),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 10),
+                      margin: const EdgeInsets.only(bottom: 20, top: 10),
+                      decoration: BoxDecoration(
+                        color: Constants.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      height: 80,
+                      width: size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                  height: 20,
+                                  child: Image.asset(
+                                      'assets/images/PriceUnit-green.png')),
+                              const SizedBox(width: 5),
+                              Text(
+                                _plantList[index].price.toString().farsiNumber,
+                                style: TextStyle(
+                                    color: Constants.primaryColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Lalezar'),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  color: Constants.primaryColor,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 5,
+                                left: 0,
+                                right: 0,
+                                child: Image.asset(
+                                  _plantList[index].imageURL,
+                                  height: 80,
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 5,
+                                right: 80,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      _plantList[index].category,
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontFamily: 'YekanBakh',
+                                      ),
+                                    ),
+                                    Text(
+                                      _plantList[index].plantName,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: 'YekanBakh',
+                                        color: Constants.blackColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -210,5 +352,17 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+}
+
+extension FarsiNumberExtension on String {
+  String get farsiNumber {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const farsi = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    String text = this;
+    for (var i = 0; i < english.length; i++) {
+      text = text.replaceAll(english[i], farsi[i]);
+    }
+    return text;
   }
 }
