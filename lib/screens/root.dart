@@ -2,6 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:plant_app/const/constants.dart';
+import 'package:plant_app/models/plant.dart';
 import 'package:plant_app/screens/cart_page.dart';
 import 'package:plant_app/screens/favorite_page.dart';
 import 'package:plant_app/screens/home_page.dart';
@@ -9,21 +10,37 @@ import 'package:plant_app/screens/profile_page.dart';
 import 'package:plant_app/screens/scan_page.dart';
 
 class RootPage extends StatefulWidget {
-  const RootPage({super.key});
+  final int bottomIndex;
+  const RootPage({super.key, required this.bottomIndex});
 
   @override
   State<RootPage> createState() => _RootPageState();
 }
 
 class _RootPageState extends State<RootPage> {
-  int bottomIndex = 0;
+  int? bottomIndex;
 
-  List<Widget> pages = const [
-    HomePage(),
-    FavoritePage(),
-    CartPage(),
-    ProfilePage(),
-  ];
+  @override
+  initState() {
+    super.initState();
+    bottomIndex = widget.bottomIndex;
+  }
+
+  List<Plant> favorite = [];
+  List<Plant> myCart = [];
+
+  List<Widget> pages() {
+    return [
+      const HomePage(),
+      FavoritePage(
+        favoritePlants: favorite,
+      ),
+      CartPage(
+        cartPlants: myCart,
+      ),
+      const ProfilePage(),
+    ];
+  }
 
   List<IconData> iconList = [
     Icons.home,
@@ -54,7 +71,7 @@ class _RootPageState extends State<RootPage> {
                 size: 30,
               ),
               Text(
-                appBarTitle[bottomIndex],
+                appBarTitle[bottomIndex!],
                 style: TextStyle(
                   color: Constants.blackColor,
                   fontFamily: 'Lalezar',
@@ -68,8 +85,8 @@ class _RootPageState extends State<RootPage> {
         elevation: 0,
       ),
       body: IndexedStack(
-        index: bottomIndex,
-        children: pages,
+        index: bottomIndex!,
+        children: pages(),
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(eccentricity: 1),
@@ -90,7 +107,7 @@ class _RootPageState extends State<RootPage> {
       bottomNavigationBar: AnimatedBottomNavigationBar(
         splashColor: Constants.primaryColor,
         activeColor: Constants.primaryColor,
-        activeIndex: bottomIndex,
+        activeIndex: bottomIndex!,
         inactiveColor: Colors.black.withOpacity(0.5),
         gapLocation: GapLocation.center,
         icons: iconList,
@@ -98,6 +115,11 @@ class _RootPageState extends State<RootPage> {
         onTap: (index) {
           setState(() {
             bottomIndex = index;
+            final List<Plant> favoritedPlants = Plant.getFavoritedPlants();
+            final List<Plant> addedToCartPlants = Plant.addedToCartPlants();
+
+            favorite = favoritedPlants.toSet().toList();
+            myCart = addedToCartPlants.toSet().toList();
           });
         },
       ),

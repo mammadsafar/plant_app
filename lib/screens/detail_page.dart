@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plant_app/const/constants.dart';
 import 'package:plant_app/models/plant.dart';
+import 'package:plant_app/screens/cart_page.dart';
+import 'package:plant_app/screens/root.dart';
 
 import 'package:plant_app/widgets/extensions.dart';
 
@@ -13,8 +15,14 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  List<Plant> myCart = [];
+
   bool toggleIsFavorite(bool isFavorites) {
     return !isFavorites;
+  }
+
+  bool toggleIsSelected(bool isSelected) {
+    return !isSelected;
   }
 
   @override
@@ -238,19 +246,41 @@ class _DetailPageState extends State<DetailPage> {
               height: 50,
               width: 50,
               decoration: BoxDecoration(
-                color: Constants.primaryColor.withOpacity(0.5),
+                color: plantList[widget.plantId].isSelected
+                    ? Colors.redAccent.withOpacity(0.4)
+                    : Constants.primaryColor.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(50),
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(0.1, 1.1),
                     blurRadius: 5.0,
-                    color: Constants.primaryColor.withOpacity(0.3),
+                    color: plantList[widget.plantId].isSelected
+                        ? Colors.redAccent.withOpacity(0.4)
+                        : Constants.primaryColor.withOpacity(0.3),
                   ),
                 ],
               ),
-              child: const Icon(
-                Icons.shopping_cart,
-                color: Colors.white,
+              child: InkResponse(
+                onTap: () {
+                  setState(() {
+                    final List<Plant> addedToCartPlants =
+                        Plant.addedToCartPlants();
+
+                    myCart = addedToCartPlants.toSet().toList();
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const RootPage(bottomIndex: 2);
+                      },
+                    ),
+                  );
+                },
+                child: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                ),
               ),
             ),
             const SizedBox(width: 20),
@@ -268,13 +298,72 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                   ],
                 ),
-                child: const Center(
-                  child: Text(
-                    'افزودن به سبد خرید',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Lalezar',
-                      fontSize: 18,
+                child: Center(
+                  child: InkResponse(
+                    onTap: () {
+                      // Add to cart
+                      setState(
+                        () {
+                          bool isSelected = toggleIsSelected(
+                              (plantList[widget.plantId].isSelected));
+                          plantList[widget.plantId].isSelected = isSelected;
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              // Future.delayed(const Duration(seconds: 2), () {
+                              //   Navigator.of(context).pop(true);
+                              // });
+                              return AlertDialog(
+                                content: SingleChildScrollView(
+                                  child: Center(
+                                    child: plantList[widget.plantId].isSelected
+                                        ? Text(
+                                            'گیاه ${plantList[widget.plantId].plantName} با موفقیت به سبد خرید اضافه شد',
+                                            textAlign: TextAlign.justify,
+                                            textDirection: TextDirection.rtl,
+                                            style: const TextStyle(
+                                              fontFamily: 'CloudSoftB',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                            ),
+                                          )
+                                        : Text(
+                                            'گیاه ${plantList[widget.plantId].plantName} با موفقیت از سبد خرید حذف شد',
+                                            textAlign: TextAlign.justify,
+                                            textDirection: TextDirection.rtl,
+                                            style: const TextStyle(
+                                              fontFamily: 'CloudSoftB',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                                backgroundColor:
+                                    plantList[widget.plantId].isSelected
+                                        ? Colors.greenAccent.withOpacity(0.9)
+                                        : Colors.redAccent.withOpacity(0.9),
+                                contentTextStyle: const TextStyle(
+                                    color: Colors.black, fontSize: 59),
+                                titleTextStyle: const TextStyle(
+                                    color: Color.fromARGB(255, 209, 28, 209)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: const Text(
+                      'افزودن به سبد خرید',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Lalezar',
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
