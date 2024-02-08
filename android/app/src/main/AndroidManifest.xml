@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- qr code permission -->
     <application
-        android:label="plant_app"
+        android:label="فروشگاه گیاهی"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
