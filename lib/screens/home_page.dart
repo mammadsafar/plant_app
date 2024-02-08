@@ -259,7 +259,7 @@ class _HomePageState extends State<HomePage> {
                 physics: const BouncingScrollPhysics(),
                 itemCount: _plantList.length,
                 itemBuilder: (context, index) {
-                  return newPlantWidget(plantList: _plantList, index: index);
+                  return NewPlantWidget(plantList: _plantList, index: index);
                 },
               ),
             ),

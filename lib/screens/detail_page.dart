@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_app/const/constants.dart';
 import 'package:plant_app/models/plant.dart';
-import 'package:plant_app/screens/cart_page.dart';
 import 'package:plant_app/screens/root.dart';
 
 import 'package:plant_app/widgets/extensions.dart';

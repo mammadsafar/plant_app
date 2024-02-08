@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:plant_app/const/constants.dart';
 import 'package:plant_app/models/plant.dart';
-import 'package:plant_app/screens/detail_page.dart';
-import 'package:plant_app/widgets/extensions.dart';
 import 'package:plant_app/widgets/plant_widget.dart';
 
 class FavoritePage extends StatefulWidget {
@@ -53,7 +50,7 @@ class _FavoritePageState extends State<FavoritePage> {
               physics: const BouncingScrollPhysics(),
               itemCount: widget.favoritePlants.length,
               itemBuilder: (context, index) {
-                return newPlantWidget(
+                return NewPlantWidget(
                     plantList: widget.favoritePlants, index: index);
               },
             ),

@@ -5,8 +5,8 @@ import 'package:plant_app/models/plant.dart';
 import 'package:plant_app/screens/detail_page.dart';
 import 'package:plant_app/widgets/extensions.dart';
 
-class newPlantWidget extends StatelessWidget {
-  const newPlantWidget({
+class NewPlantWidget extends StatelessWidget {
+  const NewPlantWidget({
     super.key,
     required List<Plant> plantList,
     required this.index,

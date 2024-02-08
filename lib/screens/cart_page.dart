@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:plant_app/const/constants.dart';
 import 'package:plant_app/models/plant.dart';
-import 'package:plant_app/screens/detail_page.dart';
 import 'package:plant_app/widgets/extensions.dart';
 import 'package:plant_app/widgets/plant_widget.dart';
 
@@ -42,7 +40,6 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return widget.cartPlants.isEmpty
         ? Center(
             child: Column(
@@ -80,7 +77,7 @@ class _CartPageState extends State<CartPage> {
                     physics: const BouncingScrollPhysics(),
                     itemCount: widget.cartPlants.length,
                     itemBuilder: (context, index) {
-                      return newPlantWidget(
+                      return NewPlantWidget(
                           plantList: widget.cartPlants, index: index);
                     },
                   ),
