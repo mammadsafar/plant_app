@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- qr code permission -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- qr code permission -->
     <application
         android:label="plant_app"
         android:name="${applicationName}"
