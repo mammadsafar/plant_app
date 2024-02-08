@@ -19,6 +19,7 @@ class _CameraPageState extends State<CameraPage> {
       body: Stack(
         children: [
           MobileScanner(
+            controller: cameraController,
             allowDuplicates: false,
             onDetect: (barcode, args) {
               if (barcode.rawValue == null) {
