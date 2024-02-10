@@ -1,6 +1,6 @@
 # PlantApp ReadMe
 
-Api Crypto Mobile Application.
+Api Plant Stor Mobile Application.
 
 ![alt text](./assets/Intro.gif)
 
